@@ -11,7 +11,7 @@ end
 
 [m, n] = size(I);
 
-b = randi([0, 1], 1, 10000);
+b = [];
 
 %-----Histogram Processing-----% 
 [counts, binLoc] = imhist(I);
@@ -19,14 +19,6 @@ P = binLoc(counts == max(counts));
 Zeros = binLoc(counts == 0);
 diff = abs(Zeros - P);
 Z = Zeros(diff == min(diff));
-
-if P > Z
-    shift = -1;
-    left = Z; right = P;
-else
-    shift = 1;
-    left = P; right = Z;
-end
 
 %-----Secret Data Embedding-----%
 I = I(:);
@@ -37,30 +29,31 @@ if P > Z
     for ii =  1:length(I)    
         if I(ii) > Z && I(ii) <= P
             if I(ii) == P
+                b(count) = randi([0, 1]);
                 s(ii) = s(ii) - 1 + b(count);
                 count = count + 1;
             else
                 s(ii) = s(ii) - 1;
             end
-        end
-        if count > length(I)
-            s(ii+1:end) = I(ii+1:end);
-            break
-        end
+         end
+%         if count > length(b) % Uncomment if length of b is known 
+%             break
+%         end
     end
 elseif P < Z
     for ii =  1:length(I)    
         if I(ii) >= P && I(ii) < Z
             if I(ii) == P
+                b(count) = randi([0, 1]);
                 s(ii) = s(ii) + 1 - b(count);
                 count = count + 1;
             else
                 s(ii) = s(ii) + 1;
             end
         end
-        if count > length(I)            
-            break
-        end
+%         if count > length(b) % Uncomment if length of b is known            
+%             break
+%         end
     end
 end
 
@@ -73,3 +66,5 @@ title("Cover Image Histogram");
 subplot(1, 2, 2);
 imhist(s);
 title('Stego Image Histogram');
+
+save('Histogram_Shifting_Embedding', 's', 'b', 'P', 'Z');
