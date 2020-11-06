@@ -12,3 +12,22 @@ There are two main files in this repo
 2. Histogram_Shifting_Extraction.m
 
 The mat file is used to carry some of the variables from the embedding file to the extraction file. 
+
+### Input and Output details
+
+   _Embedding_
+
+    Input:
+      Cover File
+
+    Output:
+      Stego File
+      
+
+   _Extraction_
+    
+    Input: 
+      Stego File
+      
+    Output:
+      Secret Data
